@@ -17,10 +17,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = $formController->saveForms($data);
     echo json_encode($response);
 }
-echo '<pre>';
-print_r($_ENV);
-print_r($_SERVER);
-echo '</pre>';
-die();
-
 ?>
