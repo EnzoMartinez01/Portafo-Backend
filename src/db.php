@@ -4,17 +4,22 @@ use Dotenv\Dotenv;
 
 require '../vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
 
 class Database {
     private $client;
     private $db;
 
     public function __construct() {
-        try {
-            $this->client = new MongoDB\Client($_ENV['MONGODB_URI']);
-            $this->db = $this->client->selectDatabase($_ENV['MONGODB_DATABASE']);
+       try {
+            $mongoUri = getenv('MONGODB_URI') ?: $_ENV['MONGODB_URI'] ?? null;
+            $mongoDb = getenv('MONGODB_DATABASE') ?: $_ENV['MONGODB_DATABASE'] ?? null;
+
+            if (!$mongoUri || !$mongoDb) {
+                throw new Exception("Variables de entorno no configuradas correctamente.");
+            }
+
+            $this->client = new MongoDB\Client($mongoUri);
+            $this->db = $this->client->selectDatabase($mongoDb);
         } catch (Exception $e) {
             die("Error de conexión a MongoDB: " . $e->getMessage());
         }
