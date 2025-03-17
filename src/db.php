@@ -26,7 +26,7 @@ class Database {
     }
 
     public function getCollection($collectionName) {
-        return $this->db->$collectionName;
+        return $this->db->selectCollection($collectionName);
     }
 }
 ?>
