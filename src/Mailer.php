@@ -6,24 +6,22 @@ use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/autoload.php';
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
-
 class Mailer {
     public static function sendEmail($names, $email, $message) {
         $mail = new PHPMailer(true);
 
         try {
             $mail->isSMTP();
-            $mail->Host = $_ENV['MAIL_HOST'];
+            $mail->Host = getenv('MAIL_HOST') ?: $_ENV['MAIL_HOST'] ?? null;
             $mail->SMTPAuth = true;
-            $mail->Username = $_ENV['MAIL_USERNAME'];
-            $mail->Password = $_ENV['MAIL_PASSWORD'];
-            $mail->SMTPSecure = $_ENV['MAIL_ENCRYPTION'];
-            $mail->Port = $_ENV['MAIL_PORT'];
+            $mail->Username = getenv('MAIL_USERNAME') ?: $_ENV['MAIL_USERNAME'] ?? null;
+            $mail->Password = getenv('MAIL_PASSWORD') ?: $_ENV['MAIL_PASSWORD'] ?? null;
+            $mail->SMTPSecure = getenv('MAIL_ENCRYPTION') ?: $_ENV['MAIL_ENCRYPTION'] ?? 'tls';
+            $mail->Port = getenv('MAIL_PORT') ?: $_ENV['MAIL_PORT'] ?? 587;
 
-            $mail->setFrom($_ENV['MAIL_USERNAME'], $_ENV['MAIL_FROM_NAME']);
-            $mail->addAddress('MAIL_FROM_ADDRESS', 'Administrador');
+            $mail->setFrom($mail->Username, getenv('MAIL_FROM_NAME') ?: $_ENV['MAIL_FROM_NAME'] ?? 'No-Reply');
+            $mail->addAddress(getenv('MAIL_FROM_ADDRESS') ?: $_ENV['MAIL_FROM_ADDRESS'] ?? 'admin@example.com', 'Administrador');
+
             $mail->isHTML(true);
             $mail->Subject = 'Nuevo Mensaje de Contacto';
             $mail->Body = "
