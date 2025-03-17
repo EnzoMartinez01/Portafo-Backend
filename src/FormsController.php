@@ -20,9 +20,9 @@ class FormsController {
         }
     
         $safeData = [
-            'names' => htmlspecialchars($data['names'], ENT_QUOTES, 'UTF-8'),
+            'names' => htmlspecialchars($data['names'], 'UTF-8'),
             'email' => filter_var($data['email'], FILTER_SANITIZE_EMAIL),
-            'message' => htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8')
+            'message' => htmlspecialchars($data['message'], 'UTF-8')
         ];
     
         try {
